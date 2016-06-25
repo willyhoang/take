@@ -1,0 +1,45 @@
+<% import com.willyhoang.take.scrapers.NormalizedClass %>
+<%@ val body: Seq[NormalizedClass] %>
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Classes</title>
+
+    </head>
+    <body>
+        <div id="classes">
+            <input class="search" placeholder="Search" />
+            <button class="sort" data-sort="startTimeHidden">
+                Sort by Start Time
+            </button>
+            <button class="sort" data-sort="style">
+                Sort by Style
+            </button>
+            <table>
+                <tbody class="list">
+                #for (i: NormalizedClass <- body)
+                    <tr>
+                        <td class="date">${i.date.toString("E MM/dd")}</td>
+                        <td class="startTime">${i.startTime.toString("h:mm a")}
+                        <span class="startTimeHidden" style="display:none">${i.startTime.toDateTimeToday.getMillis}</span></td>
+                        <td class="endTime">${i.endTime.toString("h:mm a")}</td>
+                        <td class="studio">${i.studio}</td>
+                        <td class="instructor">${i.instructor}</td>
+                        <td class="style">${i.style}</td>
+                        <td class="level">${i.level}</td>
+                    </tr>
+                #end
+                </tbody>
+            </table>
+        </div>
+
+        <script src="http://listjs.com/no-cdn/list.js"></script>
+        <script type="text/javascript">
+            var options = {
+            valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
+            };
+
+            var classesList = new List('classes', options);
+        </script>
+    </body>
+</html>
