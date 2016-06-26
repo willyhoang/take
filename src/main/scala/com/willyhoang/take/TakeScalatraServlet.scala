@@ -1,7 +1,7 @@
 package com.willyhoang.take
 
 
-import com.willyhoang.take.scrapers.BDCScraperUtil
+import com.willyhoang.take.scrapers.{EXPGScraperUtil, BDCScraperUtil}
 import org.joda.time.LocalDate
 
 class TakeScalatraServlet extends TakeWebAppStack {
@@ -17,9 +17,11 @@ class TakeScalatraServlet extends TakeWebAppStack {
 
   get("/classes") {
     contentType = "text/html"
-    val today = LocalDate.now().toString("yyyy-MM-dd")
-    val classes = BDCScraperUtil.getClasses(today)
-//    ssp("classes", "body" -> classes)
+    val today = LocalDate.now().plusDays(1).toString("yyyy-MM-dd")
+    val bdcClasses = BDCScraperUtil.getClasses(today)
+    val expgClasses = EXPGScraperUtil.getClasses(today)
+
+    val classes = (bdcClasses ++ expgClasses).sortBy(_.startTime.toDateTimeToday.getMillis)
     ssp("index", "body" -> classes)
   }
 }

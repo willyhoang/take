@@ -31,7 +31,8 @@ object TakeWebAppBuild extends Build {
         "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.jsoup" % "jsoup" % "1.7.2",
-        "joda-time" % "joda-time" % "2.9.4"
+        "joda-time" % "joda-time" % "2.9.4",
+        "org.seleniumhq.selenium" % "selenium-java" % "2.35.0"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
