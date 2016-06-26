@@ -15,12 +15,14 @@ class TakeScalatraServlet extends TakeWebAppStack {
     </html>
   }
 
-  get("/classes") {
+  get("/classes/:date") {
     contentType = "text/html"
-    val today = LocalDate.now().plusDays(1).toString("yyyy-MM-dd")
-    val bdcClasses = BDCScraperUtil.getClasses(today)
-    val expgClasses = EXPGScraperUtil.getClasses(today)
-    val peridanceClasses = PeridanceScraperUtil.getClasses(today)
+    val date = params("date")
+
+    LocalDate.parse(date)
+    val bdcClasses = BDCScraperUtil.getClasses(date)
+    val expgClasses = EXPGScraperUtil.getClasses(date)
+    val peridanceClasses = PeridanceScraperUtil.getClasses(date)
 
     val classes = (bdcClasses ++ expgClasses ++ peridanceClasses).sortBy(_.startTime.toDateTimeToday.getMillis)
     ssp("index", "body" -> classes)

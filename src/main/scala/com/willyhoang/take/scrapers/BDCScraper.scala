@@ -1,7 +1,7 @@
 package com.willyhoang.take.scrapers
 
 import org.joda.time.LocalDate
-import org.jsoup.Jsoup
+import org.jsoup.{HttpStatusException, Jsoup}
 import org.jsoup.nodes.{Element, Document}
 import org.jsoup.select.Elements
 
@@ -54,10 +54,17 @@ object BDCScraper {
   def scrape(date: String): Seq[Seq[String]] = {
     val formattedDate = formatDate(date)
 
-    val doc : Document = Jsoup.connect(s"http://broadwaydancecenter.com/schedule/$formattedDate.shtml").get()
-    val elements : Elements = doc.select(".grid tbody tr")
-    val dateText = elements.first().text()
-    val classRows : Seq[Element] = elements.subList(1, elements.size()).asScala
-    classRows.map(_.children().asScala.map(_.text()))
+    try {
+      val doc: Document = Jsoup.connect(s"http://broadwaydancecenter.com/schedule/$formattedDate.shtml").get()
+      val elements: Elements = doc.select(".grid tbody tr")
+      val dateText = elements.first().text()
+      val classRows: Seq[Element] = elements.subList(1, elements.size()).asScala
+      classRows.map(_.children().asScala.map(_.text()))
+    } catch {
+      case e: HttpStatusException => {
+        println(e)
+        List(List())
+      }
+    }
   }
 }

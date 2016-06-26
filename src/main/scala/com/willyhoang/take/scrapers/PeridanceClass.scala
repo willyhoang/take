@@ -23,14 +23,12 @@ case class PeridanceClass(date: String, time: String, level: String, teacher: St
 
   def parseTimes(time: String): (LocalTime, LocalTime) = {
     val times = time.split("-")
-
     val parsedStartTime = parseTime(times(0))
     val parsedEndTime = parseTime(times(1))
     (parsedStartTime, parsedEndTime)
   }
 
   def toNormalizedClass(): NormalizedClass = {
-    println(this)
     val parsedDate = LocalDate.parse(date)
     val (startTime, endTime) = parseTimes(time)
     NormalizedClass(parsedDate, startTime, endTime, studioName, teacher, style, level)
