@@ -30,7 +30,8 @@ object EXPGScraper {
 
   def getHtml(date: String): String = {
     val formattedDate = LocalDate.parse(date).toString("M/dd/yyyy")
-    System.setProperty("webdriver.chrome.driver", "/Users/willy/Desktop/chromedriver")
+    val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
+    System.setProperty("webdriver.chrome.driver", chromePath)
     driver = new ChromeDriver()
     driver.get("https://clients.mindbodyonline.com/classic/home?studioid=177785")
 

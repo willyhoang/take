@@ -42,8 +42,8 @@ object PeridanceScraper {
     val year = parsedDate.getYear
     val day = parsedDate.getDayOfMonth
     val month = parsedDate.getMonthOfYear
-
-    System.setProperty("webdriver.chrome.driver", "/Users/willy/Desktop/chromedriver")
+    val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
+    System.setProperty("webdriver.chrome.driver", chromePath)
     val driver = new ChromeDriver()
     driver.get("http://www.peridance.com/openclasses.cfm")
 
