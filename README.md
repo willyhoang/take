@@ -1,4 +1,5 @@
-# Take Web App #
+# Take #
+Easily find dance classes in NYC.
 
 ## Build & Run ##
 Download the ChromeDriver from here
