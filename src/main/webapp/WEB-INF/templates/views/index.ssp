@@ -78,19 +78,6 @@
                         <th>Level</th>
                     </thead>
                     <tbody id="classesTbody" class="list">
-
-                        <%--#for (i: NormalizedClass <- body)--%>
-                            <%--<tr>--%>
-                                <%--<td class="date">${i.date.toString("E M/dd")}</td>--%>
-                                <%--<td class="startTime">${i.startTime.toString("h:mm a")}--%>
-                                <%--<span class="startTimeHidden" style="display:none">${i.startTime.toDateTimeToday.getMillis}</span></td>--%>
-                                <%--<td class="endTime">${i.endTime.toString("h:mm a")}</td>--%>
-                                <%--<td class="studio">${i.studio}</td>--%>
-                                <%--<td class="instructor">${i.instructor}</td>--%>
-                                <%--<td class="style">${i.style}</td>--%>
-                                <%--<td class="level">${i.level}</td>--%>
-                            <%--</tr>--%>
-                        <%--#end--%>
                     </tbody>
                 </table>
             </div>
@@ -160,15 +147,8 @@
         });
 
         $('#sandbox-container input').on('changeDate', function(e){
-            <%--console.debug('change date', e.date, $(this).data('stickyDate'));--%>
             var dateString = e.date.toISOString().substring(0, 10);
             loadClasses(dateString)
-            <%--if ( e.date ) {--%>
-                <%--$(this).data('stickyDate', e.date);--%>
-            <%--}--%>
-            <%--else {--%>
-                <%--$(this).data('stickyDate', null);--%>
-            <%--}--%>
         });
 
         setTimeout(function () {
