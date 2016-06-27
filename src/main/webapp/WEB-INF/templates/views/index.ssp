@@ -68,16 +68,17 @@
 
             <div class="panel panel-default">
                 <table class="table table-striped">
+                    <thead>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Studio</th>
+                        <th>Instructor</th>
+                        <th>Style</th>
+                        <th>Level</th>
+                    </thead>
                     <tbody id="classesTbody" class="list">
-                        <thead>
-                                <th>Date</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Studio</th>
-                                <th>Instructor</th>
-                                <th>Style</th>
-                                <th>Level</th>
-                        </thead>
+
                         <%--#for (i: NormalizedClass <- body)--%>
                             <%--<tr>--%>
                                 <%--<td class="date">${i.date.toString("E M/dd")}</td>--%>
@@ -100,20 +101,26 @@
         <script src="http://listjs.com/no-cdn/list.js"></script>
         <script type="text/javascript">
 
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "http://localhost:8080/classes/2016-06-26",
-            success: function(data){
-                makeTable(data)
-                var options = {
-                    valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
-                };
-                var classesList = new List('classes', options);
-            }
-        });
+        function loadClasses(date) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "http://localhost:8080/classes/" + date,
+                success: function(data){
+                    makeTable(data)
+                    var options = {
+                        valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
+                    };
+                    var classesList = new List('classes', options);
+                }
+            });
+        }
+        var today = new Date()
+        var todayString = today.toISOString().slice(0,10)
+        loadClasses(todayString)
 
         function makeTable(jsonData) {
+            $('#classesTbody').html("")
             for (var i = 0; i < jsonData.length; i++) {
                 row = makeRow(jsonData[i]);
                 $('#classesTbody').append(row)
@@ -155,8 +162,7 @@
         $('#sandbox-container input').on('changeDate', function(e){
             <%--console.debug('change date', e.date, $(this).data('stickyDate'));--%>
             var dateString = e.date.toISOString().substring(0, 10);
-            console.debug('change date', dateString);
-            window.location.href = "http://" + window.location.host + "/classes/" + dateString;
+            loadClasses(dateString)
             <%--if ( e.date ) {--%>
                 <%--$(this).data('stickyDate', e.date);--%>
             <%--}--%>
