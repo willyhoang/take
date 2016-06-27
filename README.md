@@ -16,3 +16,9 @@ $ sbt
 
 If `browse` doesn't launch your browser, manually open [http://localhost:8080/](http://localhost:8080/) in your browser.
 
+
+## Deploying on Heroku ##
+
+Set config variable for key CHROME_WEBDRIVER_PATH. This should be the location
+where the buildpack installs the chromedriver executable. (This is needed for
+Selenium to run).
