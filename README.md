@@ -27,4 +27,4 @@ Selenium to run).
 
 This web app was built using Scalatra. Web scraping and parsing was done using
 Jsoup and Selenium. Bootstrap is used for prettifying the page and basic jquery
-is done to make requests to the web server.
+is used to make requests to the web server.
