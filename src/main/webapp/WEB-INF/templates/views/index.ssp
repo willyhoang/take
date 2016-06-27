@@ -1,5 +1,5 @@
 <% import com.willyhoang.take.scrapers.NormalizedClass %>
-<%@ val body: Seq[NormalizedClass] %>
+<%@ val body: String %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -45,7 +45,7 @@
                 <form class="navbar-form navbar-left" role="search">
 
                     <div class="input-group date" id="sandbox-container">
-                        <input type="text" type="text" class="form-control" />
+                        <input type="text" type="text" class="form-control" placeholder="Chooose day"/>
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
@@ -68,19 +68,28 @@
 
             <div class="panel panel-default">
                 <table class="table table-striped">
-                    <tbody class="list">
-                        #for (i: NormalizedClass <- body)
-                            <tr>
-                                <td class="date">${i.date.toString("E M/dd")}</td>
-                                <td class="startTime">${i.startTime.toString("h:mm a")}
-                                <span class="startTimeHidden" style="display:none">${i.startTime.toDateTimeToday.getMillis}</span></td>
-                                <td class="endTime">${i.endTime.toString("h:mm a")}</td>
-                                <td class="studio">${i.studio}</td>
-                                <td class="instructor">${i.instructor}</td>
-                                <td class="style">${i.style}</td>
-                                <td class="level">${i.level}</td>
-                            </tr>
-                        #end
+                    <tbody id="classesTbody" class="list">
+                        <thead>
+                                <th>Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Studio</th>
+                                <th>Instructor</th>
+                                <th>Style</th>
+                                <th>Level</th>
+                        </thead>
+                        <%--#for (i: NormalizedClass <- body)--%>
+                            <%--<tr>--%>
+                                <%--<td class="date">${i.date.toString("E M/dd")}</td>--%>
+                                <%--<td class="startTime">${i.startTime.toString("h:mm a")}--%>
+                                <%--<span class="startTimeHidden" style="display:none">${i.startTime.toDateTimeToday.getMillis}</span></td>--%>
+                                <%--<td class="endTime">${i.endTime.toString("h:mm a")}</td>--%>
+                                <%--<td class="studio">${i.studio}</td>--%>
+                                <%--<td class="instructor">${i.instructor}</td>--%>
+                                <%--<td class="style">${i.style}</td>--%>
+                                <%--<td class="level">${i.level}</td>--%>
+                            <%--</tr>--%>
+                        <%--#end--%>
                     </tbody>
                 </table>
             </div>
@@ -90,11 +99,54 @@
     </div>
         <script src="http://listjs.com/no-cdn/list.js"></script>
         <script type="text/javascript">
-            var options = {
-            valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
-            };
 
-            var classesList = new List('classes', options);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/classes/2016-06-26",
+            success: function(data){
+                makeTable(data)
+                var options = {
+                    valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
+                };
+                var classesList = new List('classes', options);
+            }
+        });
+
+        function makeTable(jsonData) {
+            for (var i = 0; i < jsonData.length; i++) {
+                row = makeRow(jsonData[i]);
+                $('#classesTbody').append(row)
+            }
+        }
+
+        function makeRow(rowData) {
+            var row = "<tr>"
+            row += "<td class=\"date\">" + rowData.date.month + "/" + rowData.date.day + "</td>"
+            var startTime = formatTime(rowData.startTime.hour, rowData.startTime.minute)
+            row += "<td class=\"startTime\">" + dateToString(startTime) + "<span class=\"startTimeHidden\" style=\"display:none\">"+ startTime.getTime() + "</span>" + "</td>"
+            var endTime = formatTime(rowData.endTime.hour, rowData.endTime.minute)
+            row += "<td class=\"endTime\">" + dateToString(endTime) + "</td>"
+            row += "<td class=\"studio\">" + rowData.studio + "</td>"
+            row += "<td class=\"instructor\">" + rowData.instructor + "</td>"
+            row += "<td class=\"style\">" + rowData.style + "</td>"
+            row += "<td class=\"level\">" + rowData.level + "</td>"
+            row += "</tr>"
+            return row
+        }
+
+
+        function formatTime(hour, minute) {
+            var d = new Date();
+            d.setHours(hour);
+            d.setMinutes(minute);
+            return d
+        }
+
+        function dateToString(d) {
+            return d.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
+        }
+
 
         $('#sandbox-container input').datepicker({
             autoclose: true
@@ -113,6 +165,10 @@
             <%--}--%>
         });
 
+        setTimeout(function () {
+
+
+        }, 2000);
 
     </script>
 

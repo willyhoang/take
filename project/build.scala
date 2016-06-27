@@ -32,7 +32,9 @@ object TakeWebAppBuild extends Build {
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.jsoup" % "jsoup" % "1.7.2",
         "joda-time" % "joda-time" % "2.9.4",
-        "org.seleniumhq.selenium" % "selenium-java" % "2.35.0"
+        "org.seleniumhq.selenium" % "selenium-java" % "2.35.0",
+        "net.liftweb" %% "lift-json" % "2.6.3",
+        "net.liftweb" %% "lift-json-ext" % "2.6.3"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
