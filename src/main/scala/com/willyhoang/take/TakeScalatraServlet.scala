@@ -1,14 +1,20 @@
 package com.willyhoang.take
 
 
-import com.willyhoang.take.scrapers.{EXPGScraperUtil, PeridanceScraperUtil, BDCScraperUtil}
+import com.willyhoang.take.scrapers.{BDCScraperUtil, EXPGScraperUtil, PeridanceScraperUtil}
 import net.liftweb.json.Serialization.write
 import net.liftweb.json.ext.JodaTimeSerializers
 import net.liftweb.json.{NoTypeHints, Serialization}
 import org.joda.time.LocalDate
 import org.scalatra.Ok
+import org.scalatra.cache.CacheSupport
+import org.scalatra.guavaCache.GuavaCache
 
-class TakeScalatraServlet extends TakeWebAppStack {
+import scala.concurrent.duration.{Duration, HOURS}
+
+class TakeScalatraServlet extends TakeWebAppStack with CacheSupport {
+
+  implicit val cacheBackend = GuavaCache
 
   get("/") {
     contentType = "text/html"
@@ -16,17 +22,20 @@ class TakeScalatraServlet extends TakeWebAppStack {
   }
 
   get("/classes/:date") {
-    val date = params("date")
+    val expirationTime = Some(Duration(2, HOURS))
+    cached(expirationTime) {
+      val date = params("date")
 
-    LocalDate.parse(date)
-    val bdcClasses = BDCScraperUtil.getClasses(date)
-    val expgClasses = EXPGScraperUtil.getClasses(date)
-    val peridanceClasses = PeridanceScraperUtil.getClasses(date)
+      LocalDate.parse(date)
+      val bdcClasses = BDCScraperUtil.getClasses(date)
+      val expgClasses = EXPGScraperUtil.getClasses(date)
+      val peridanceClasses = PeridanceScraperUtil.getClasses(date)
 
-    val classes = (bdcClasses ++ expgClasses ++ peridanceClasses).sortBy(_.startTime.toDateTimeToday.getMillis)
+      val classes = (bdcClasses ++ expgClasses ++ peridanceClasses).sortBy(_.startTime.toDateTimeToday.getMillis)
 
-    implicit val formats = Serialization.formats(NoTypeHints) ++ JodaTimeSerializers.all
-    val jsonClasses = write(classes)
-    Ok(jsonClasses)
+      implicit val formats = Serialization.formats(NoTypeHints) ++ JodaTimeSerializers.all
+      val jsonClasses = write(classes)
+      Ok(jsonClasses)
+    }
   }
 }
