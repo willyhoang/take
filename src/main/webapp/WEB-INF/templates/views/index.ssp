@@ -1,4 +1,4 @@
-<% import com.willyhoang.take.scrapers.NormalizedClass %>
+<% import io.github.willyhoang.take.scrapers.NormalizedClass %>
 <%@ val body: String %>
 <!DOCTYPE html>
 <html>

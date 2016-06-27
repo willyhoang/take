@@ -1,12 +1,12 @@
-package com.willyhoang.take.scrapers
+package io.github.willyhoang.take.scrapers
 
 import org.joda.time.LocalDate
-import org.jsoup.{HttpStatusException, Jsoup}
-import org.jsoup.nodes.{Element, Document}
+import org.jsoup.nodes.{Document, Element}
 import org.jsoup.select.Elements
+import org.jsoup.{HttpStatusException, Jsoup}
 
-import scala.collection.mutable.Buffer
 import scala.collection.JavaConverters._
+import scala.collection.mutable.Buffer
 
 /**
  * A scraper to pull class schedules from BDC.

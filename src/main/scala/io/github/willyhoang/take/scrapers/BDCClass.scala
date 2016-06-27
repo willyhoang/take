@@ -1,4 +1,4 @@
-package com.willyhoang.take.scrapers
+package io.github.willyhoang.take.scrapers
 
 import org.joda.time.{LocalDate, LocalTime}
 

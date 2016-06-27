@@ -1,4 +1,4 @@
-package com.willyhoang.take
+package io.github.willyhoang.take
 
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.webapp.WebAppContext

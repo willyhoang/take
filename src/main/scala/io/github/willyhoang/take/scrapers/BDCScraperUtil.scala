@@ -1,4 +1,6 @@
-package com.willyhoang.take.scrapers
+package io.github.willyhoang.take.scrapers
+
+
 object BDCScraperUtil {
 
   def getClasses(date: String): Seq[NormalizedClass] = {

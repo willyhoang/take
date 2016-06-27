@@ -1,4 +1,4 @@
-package com.willyhoang.take
+package io.github.willyhoang.take
 
 import org.scalatra.test.specs2._
 

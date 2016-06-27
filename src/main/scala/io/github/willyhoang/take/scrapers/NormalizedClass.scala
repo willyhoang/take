@@ -1,4 +1,4 @@
-package com.willyhoang.take.scrapers
+package io.github.willyhoang.take.scrapers
 
 import net.liftweb.json.Serialization.write
 import net.liftweb.json.ext.JodaTimeSerializers

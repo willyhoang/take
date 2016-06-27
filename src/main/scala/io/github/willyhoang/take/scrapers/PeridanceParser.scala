@@ -1,4 +1,4 @@
-package com.willyhoang.take.scrapers
+package io.github.willyhoang.take.scrapers
 
 /**
  * A parser to convert raw text into a EXPGClass object.

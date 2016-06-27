@@ -1,7 +1,6 @@
-package com.willyhoang.take
+package io.github.willyhoang.take
 
-
-import com.willyhoang.take.scrapers.{BDCScraperUtil, EXPGScraperUtil, PeridanceScraperUtil}
+import io.github.willyhoang.take.scrapers.{PeridanceScraperUtil, EXPGScraperUtil, BDCScraperUtil}
 import net.liftweb.json.Serialization.write
 import net.liftweb.json.ext.JodaTimeSerializers
 import net.liftweb.json.{NoTypeHints, Serialization}

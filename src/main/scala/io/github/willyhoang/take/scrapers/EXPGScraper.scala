@@ -1,9 +1,8 @@
-package com.willyhoang.take.scrapers
-
+package io.github.willyhoang.take.scrapers
 
 import org.joda.time.LocalDate
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Element, Document}
+import org.jsoup.nodes.{Document, Element}
 import org.jsoup.select.Elements
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.{By, WebElement}

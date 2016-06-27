@@ -1,6 +1,7 @@
-import com.willyhoang.take._
-import org.scalatra._
 import javax.servlet.ServletContext
+
+import io.github.willyhoang.take.TakeScalatraServlet
+import org.scalatra._
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
