@@ -4,7 +4,7 @@ import org.joda.time.LocalDate
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.jsoup.select.Elements
-import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.{By, WebElement}
 
 import scala.collection.JavaConverters._
@@ -30,9 +30,15 @@ object EXPGScraper {
 
   def getHtml(date: String): String = {
     val formattedDate = LocalDate.parse(date).toString("M/dd/yyyy")
+
     val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
     System.setProperty("webdriver.chrome.driver", chromePath)
-    driver = new ChromeDriver()
+
+    val options = new ChromeOptions();
+    val chromeBinaryPath = Option(System.getenv("CHROME_BINARY_PATH"))
+    chromeBinaryPath.foreach(options.setBinary(_))
+
+    driver = new ChromeDriver(options)
     driver.get("https://clients.mindbodyonline.com/classic/home?studioid=177785")
 
     driver.switchTo().frame("mainFrame")

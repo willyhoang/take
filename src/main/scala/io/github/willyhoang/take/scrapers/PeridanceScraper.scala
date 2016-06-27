@@ -5,7 +5,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.openqa.selenium.By
-import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 
 import scala.collection.JavaConverters._
 
@@ -42,11 +42,16 @@ object PeridanceScraper {
     val year = parsedDate.getYear
     val day = parsedDate.getDayOfMonth
     val month = parsedDate.getMonthOfYear
+
     val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
     System.setProperty("webdriver.chrome.driver", chromePath)
-    val driver = new ChromeDriver()
-    driver.get("http://www.peridance.com/openclasses.cfm")
 
+    val options = new ChromeOptions();
+    val chromeBinaryPath = Option(System.getenv("CHROME_BINARY_PATH"))
+    chromeBinaryPath.foreach(options.setBinary(_))
+
+    val driver = new ChromeDriver(options)
+    driver.get("http://www.peridance.com/openclasses.cfm")
 
     var dateSelector = driver.findElements(By.cssSelector(s"td[data-month='${month -1}']" +
                                                           s"[data-year='${year}']"))
