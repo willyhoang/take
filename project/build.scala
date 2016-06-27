@@ -7,15 +7,15 @@ import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 
-object TakeWebAppBuild extends Build {
-  val Organization = "com.willyhoang"
-  val Name = "Take Web App"
+object TakeBuild extends Build {
+  val Organization = "io.github.willyhoang"
+  val Name = "Take"
   val Version = "0.1.0-SNAPSHOT"
   val ScalaVersion = "2.11.8"
   val ScalatraVersion = "2.4.1"
 
   lazy val project = Project (
-    "take-web-app",
+    "take",
     file("."),
     settings = ScalatraPlugin.scalatraSettings ++ scalateSettings ++ Seq(
       organization := Organization,

@@ -12,7 +12,7 @@ import org.scalatra.guavaCache.GuavaCache
 
 import scala.concurrent.duration.{Duration, HOURS}
 
-class TakeScalatraServlet extends TakeWebAppStack with CacheSupport {
+class TakeScalatraServlet extends TakeStack with CacheSupport {
 
   implicit val cacheBackend = GuavaCache
 
