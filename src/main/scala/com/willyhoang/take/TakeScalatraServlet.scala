@@ -1,7 +1,7 @@
 package com.willyhoang.take
 
 
-import com.willyhoang.take.scrapers.{PeridanceScraperUtil, EXPGScraperUtil, BDCScraperUtil}
+import com.willyhoang.take.scrapers.{BDCScraperUtil, EXPGScraperUtil, PeridanceScraperUtil}
 import org.joda.time.LocalDate
 
 class TakeScalatraServlet extends TakeWebAppStack {
@@ -25,6 +25,7 @@ class TakeScalatraServlet extends TakeWebAppStack {
     val peridanceClasses = PeridanceScraperUtil.getClasses(date)
 
     val classes = (bdcClasses ++ expgClasses ++ peridanceClasses).sortBy(_.startTime.toDateTimeToday.getMillis)
+//    val classes:Seq[NormalizedClass] = List()
     ssp("index", "body" -> classes)
   }
 }

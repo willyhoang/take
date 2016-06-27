@@ -6,15 +6,16 @@
         <title>Classes</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css">
 
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
 
     </head>
     <body role="document">
@@ -40,13 +41,25 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
                 <form class="navbar-form navbar-left" role="search">
+
+                    <div class="input-group date" id="sandbox-container">
+                        <input type="text" type="text" class="form-control" />
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <input type="text" class="form-control search" placeholder="Search">
-                        </div>
-                    </form>
+                    </div>
+
+                </form>
+
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#" class="sort" data-sort="startTimeHidden">Sort by Time</a></li>
+                        <li><a href="#" class="sort" data-sort="startTimeHidden">Sort by Studio</a></li>
                         <li><a href="#" class="sort" data-sort="style">Sort by Style</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -82,7 +95,26 @@
             };
 
             var classesList = new List('classes', options);
-        </script>
+
+        $('#sandbox-container input').datepicker({
+            autoclose: true
+        });
+
+        $('#sandbox-container input').on('changeDate', function(e){
+            <%--console.debug('change date', e.date, $(this).data('stickyDate'));--%>
+            var dateString = e.date.toISOString().substring(0, 10);
+            console.debug('change date', dateString);
+            window.location.href = "http://" + window.location.host + "/classes/" + dateString;
+            <%--if ( e.date ) {--%>
+                <%--$(this).data('stickyDate', e.date);--%>
+            <%--}--%>
+            <%--else {--%>
+                <%--$(this).data('stickyDate', null);--%>
+            <%--}--%>
+        });
+
+
+    </script>
 
     </body>
 </html>
