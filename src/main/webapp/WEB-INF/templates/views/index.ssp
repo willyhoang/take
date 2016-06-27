@@ -59,13 +59,12 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#" class="sort" data-sort="startTimeHidden">Sort by Time</a></li>
-                        <li><a href="#" class="sort" data-sort="startTimeHidden">Sort by Studio</a></li>
+                        <li><a href="#" class="sort" data-sort="studio">Sort by Studio</a></li>
                         <li><a href="#" class="sort" data-sort="style">Sort by Style</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-
             <div class="panel panel-default">
                 <table class="table table-striped">
                     <thead>
@@ -81,14 +80,18 @@
                     </tbody>
                 </table>
             </div>
+            <div id="loading"></div>
         </div>
 
 
     </div>
         <script src="http://listjs.com/no-cdn/list.js"></script>
         <script type="text/javascript">
-
+        // On page start up, set progress bar
+        $('#loading').html(getProgressBarHtml());
         function loadClasses(date) {
+            $('#loading').html(getProgressBarHtml());
+            $('#classesTbody').html("");
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -107,11 +110,15 @@
         loadClasses(todayString)
 
         function makeTable(jsonData) {
-            $('#classesTbody').html("")
+            $('#loading').html("");
             for (var i = 0; i < jsonData.length; i++) {
                 row = makeRow(jsonData[i]);
                 $('#classesTbody').append(row)
             }
+        }
+
+        function getProgressBarHtml() {
+            return "<div class=\"progress\"><div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 100%\"><span class=\"sr-only\">Classes are loading...</span></div></div>"
         }
 
         function makeRow(rowData) {
