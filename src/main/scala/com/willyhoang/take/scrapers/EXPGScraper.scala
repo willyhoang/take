@@ -49,6 +49,8 @@ object EXPGScraper {
     val textDateInput = driver.findElement(By.id("txtDate"))
     textDateInput.sendKeys(formattedDate)
     textDateInput.submit()
-    driver.getPageSource
+    val pageSource = driver.getPageSource
+    driver.close()
+    pageSource
   }
 }

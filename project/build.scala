@@ -5,6 +5,7 @@ import org.scalatra.sbt.PluginKeys._
 import com.earldouglas.xwp.JettyPlugin
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 
 object TakeWebAppBuild extends Build {
   val Organization = "com.willyhoang"
@@ -30,7 +31,7 @@ object TakeWebAppBuild extends Build {
         "org.scalatra" %% "scalatra-cache" % ScalatraVersion,
         "org.scalatra" %% "scalatra-cache-guava" % ScalatraVersion,
         "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
-        "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
+        "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "compile; container",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.jsoup" % "jsoup" % "1.7.2",
         "joda-time" % "joda-time" % "2.9.4",
@@ -51,5 +52,5 @@ object TakeWebAppBuild extends Build {
         )
       }
     )
-  ).enablePlugins(JettyPlugin)
+  ).enablePlugins(JettyPlugin, JavaAppPackaging)
 }

@@ -72,6 +72,8 @@ object PeridanceScraper {
        throw new IllegalArgumentException(s"Multiple day selectors found for: ${date}")
     }
     desiredDate.head.click()
-    driver.getPageSource
+    val pageSource = driver.getPageSource
+    driver.close()
+    pageSource
   }
 }
