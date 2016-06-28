@@ -28,3 +28,10 @@ Selenium to run).
 This web app was built using Scalatra. Web scraping and parsing was done using
 Jsoup and Selenium. Bootstrap is used for prettifying the page and basic jquery
 is used to make requests to the web server.
+
+## Docker for Deployment ##
+
+Using Dockerfile from https://github.com/RobCherry/docker-chromedriver to set up
+Chrome and chromedriver in container.
+
+
