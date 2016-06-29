@@ -69,16 +69,19 @@ object PeridanceScraper {
     }
 
     // find desired date and click on it
-    val desiredDate = dateSelector.asScala.filter(_.getText == day.toString)
-    if (desiredDate.isEmpty) {
-      throw new IllegalArgumentException(s"Cannot select the day provided: ${date}")
+    try {
+      val desiredDate = dateSelector.asScala.filter(_.getText == day.toString)
+      if (desiredDate.isEmpty) {
+        throw new IllegalArgumentException(s"Cannot select the day provided: ${date}")
+      }
+      if (desiredDate.length != 1) {
+        throw new IllegalArgumentException(s"Multiple day selectors found for: ${date}")
+      }
+      desiredDate.head.click()
+      val pageSource = driver.getPageSource
+      pageSource
+    } finally {
+      driver.close()
     }
-    if (desiredDate.length != 1) {
-       throw new IllegalArgumentException(s"Multiple day selectors found for: ${date}")
-    }
-    desiredDate.head.click()
-    val pageSource = driver.getPageSource
-    driver.close()
-    pageSource
   }
 }

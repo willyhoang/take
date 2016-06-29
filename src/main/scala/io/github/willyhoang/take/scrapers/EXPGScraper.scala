@@ -10,7 +10,6 @@ import org.openqa.selenium.{By, WebElement}
 import scala.collection.JavaConverters._
 
 object EXPGScraper {
-  var driver : ChromeDriver = _
 
   def clearInput(element: WebElement): Unit = {
     val originalValue = element.getAttribute("value")
@@ -38,7 +37,7 @@ object EXPGScraper {
     val chromeBinaryPath = Option(System.getenv("CHROME_BINARY_PATH"))
     chromeBinaryPath.foreach(options.setBinary(_))
 
-    driver = new ChromeDriver(options)
+    val driver = new ChromeDriver(options)
     driver.get("https://clients.mindbodyonline.com/classic/home?studioid=177785")
 
     driver.switchTo().frame("mainFrame")
