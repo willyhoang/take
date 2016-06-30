@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Classes</title>
+        <title>Take - New York Dance Classes</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css">
@@ -17,11 +17,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body role="document">
 
     <div class="container theme-showcase" role="main">
-        <h1>Classes aggregator</h1>
+        <h1>Take - Classes aggregator</h1>
         <p class="lead">Easily look through classes from various dance studios in NYC.</p>
 
         <div id="classes">
@@ -105,8 +106,15 @@
                 }
             });
         }
-        var today = new Date()
-        var todayString = today.toISOString().slice(0,10)
+
+        function getDate() {
+            var date = new Date();
+            var local = date;
+            local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        }
+
+        var todayString = getDate()
         loadClasses(todayString)
 
         function makeTable(jsonData) {
