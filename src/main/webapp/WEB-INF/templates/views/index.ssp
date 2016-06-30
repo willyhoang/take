@@ -17,7 +17,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <style>
+            td {
+                word-wrap:break-word;
+                word-break:break-word;
+            }
+        </style>
     </head>
     <body role="document">
 
@@ -69,13 +75,13 @@
             <div class="panel panel-default">
                 <table class="table table-striped">
                     <thead>
-                        <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Studio</th>
-                        <th>Instructor</th>
-                        <th>Style</th>
-                        <th>Level</th>
+                        <th class="hidden-xs col-md-1">Date</th>
+                        <th class="col-md-1">Start Time</th>
+                        <th class="hidden-xs col-md-1">End Time</th>
+                        <th class="col-md-1">Studio</th>
+                        <th class="col-md-3">Instructor</th>
+                        <th class="col-md-2">Style</th>
+                        <th class="hidden-xs col-md-1">Level</th>
                     </thead>
                     <tbody id="classesTbody" class="list">
                     </tbody>
@@ -144,15 +150,15 @@
 
         function makeRow(rowData) {
             var row = "<tr>"
-            row += "<td class=\"date\">" + rowData.date.month + "/" + rowData.date.day + "</td>"
+            row += "<td class=\"date hidden-xs\">" + rowData.date.month + "/" + rowData.date.day + "</td>"
             var startTime = formatTime(rowData.startTime.hour, rowData.startTime.minute)
-            row += "<td class=\"startTime\">" + dateToString(startTime) + "<span class=\"startTimeHidden\" style=\"display:none\">"+ startTime.getTime() + "</span>" + "</td>"
+            row += "<td class=\"startTime\">" + dateToString(startTime) + "<span class=\"startTimeHidden\" style=\"display:none\">"+ dateToString(startTime, false) + "</span>" + "</td>"
             var endTime = formatTime(rowData.endTime.hour, rowData.endTime.minute)
-            row += "<td class=\"endTime\">" + dateToString(endTime) + "</td>"
+            row += "<td class=\"endTime hidden-xs\">" + dateToString(endTime) + "</td>"
             row += "<td class=\"studio\">" + rowData.studio + "</td>"
             row += "<td class=\"instructor\">" + rowData.instructor + "</td>"
             row += "<td class=\"style\">" + rowData.style + "</td>"
-            row += "<td class=\"level\">" + rowData.level + "</td>"
+            row += "<td class=\"level hidden-xs\">" + rowData.level + "</td>"
             row += "</tr>"
             return row
         }
@@ -162,11 +168,12 @@
             var d = new Date();
             d.setHours(hour);
             d.setMinutes(minute);
+            d.setSeconds(0);
             return d
         }
 
-        function dateToString(d) {
-            return d.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
+        function dateToString(d, useHour12=true) {
+            return d.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit', hour12: useHour12});
         }
 
 
