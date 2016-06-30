@@ -1,13 +1,15 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
+
 /**
  * A parser to convert raw text into a EXPGClass object.
  */
-object PeridanceParser {
+object PeridanceParser extends LazyLogging {
 
   def parse(date: String, input: Seq[String]): Option[PeridanceClass] = {
     if (input.length != 4) {
-      println("Could not parse input as PeridanceClass", input)
+      logger.warn(s"Could not parse input as PeridanceClass: ${input}")
       None
     } else {
       Some(

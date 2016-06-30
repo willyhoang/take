@@ -41,7 +41,9 @@ object TakeBuild extends Build {
         "joda-time" % "joda-time" % "2.9.4",
         "org.seleniumhq.selenium" % "selenium-java" % "2.35.0",
         "net.liftweb" %% "lift-json" % "2.6.3",
-        "net.liftweb" %% "lift-json-ext" % "2.6.3"
+        "net.liftweb" %% "lift-json-ext" % "2.6.3",
+        "ch.qos.logback" % "logback-classic" % "1.1.1" % "runtime",
+        "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(

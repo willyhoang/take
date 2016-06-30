@@ -1,5 +1,6 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -9,7 +10,7 @@ import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 
 import scala.collection.JavaConverters._
 
-object PeridanceScraper {
+object PeridanceScraper extends LazyLogging {
 
   def findGenre(index: Int, genres: Seq[(String, Int)]) = {
     genres.filter{ case (_, i) => i <= index}.last._1
@@ -30,7 +31,7 @@ object PeridanceScraper {
         .map { case (row, index) => row :+ findGenre(index, genres) } // add genre
     } catch {
       case e: IllegalArgumentException => {
-        println(e)
+        logger.error("Error scraping html from page", e)
         List(List())
       }
     }

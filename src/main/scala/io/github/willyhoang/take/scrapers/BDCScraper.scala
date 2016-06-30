@@ -1,5 +1,6 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import org.jsoup.nodes.{Document, Element}
 import org.jsoup.select.Elements
@@ -11,7 +12,7 @@ import scala.collection.mutable.Buffer
 /**
  * A scraper to pull class schedules from BDC.
  */
-object BDCScraper {
+object BDCScraper extends LazyLogging {
 
   /**
    * The relevant fields for a class at BDC.
@@ -62,7 +63,7 @@ object BDCScraper {
       classRows.map(_.children().asScala.map(_.text()))
     } catch {
       case e: HttpStatusException => {
-        println(e)
+        logger.error("Failed to connect to broadwaycenter.com", e)
         List(List())
       }
     }

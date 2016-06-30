@@ -1,12 +1,15 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object EXPGScraperUtil {
+object EXPGScraperUtil extends LazyLogging {
 
   def getClasses(date: String): Future[Seq[NormalizedClass]] = {
     Future {
+      logger.info(s"Scraping classes for date: ${date}")
       val rawText = EXPGScraper.scrape(date)
       val parsedClasses = rawText.flatMap(EXPGParser.parse(date, _)).map(_.toNormalizedClass())
       parsedClasses

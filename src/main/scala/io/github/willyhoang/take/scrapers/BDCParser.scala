@@ -1,9 +1,11 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
+
 /**
  *
  */
-object BDCParser {
+object BDCParser extends LazyLogging {
 
   /**
    * The relevant fields for a class at BDC.
@@ -22,6 +24,7 @@ object BDCParser {
    */
   def parse(date: String, input: Seq[String]) : Option[BDCClass] = {
     if (input.length < 4) {
+      logger.warn(s"Could not parse input as BDCClass: ${input}")
       None
     } else {
       Some(
