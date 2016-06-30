@@ -22,7 +22,7 @@
     <body role="document">
 
     <div class="container theme-showcase" role="main">
-        <h1>Take - Classes aggregator</h1>
+        <h1>Classes aggregator</h1>
         <p class="lead">Easily look through classes from various dance studios in NYC.</p>
 
         <div id="classes">
@@ -103,8 +103,19 @@
                         valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
                     };
                     var classesList = new List('classes', options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    displayErrorMessage(jqXHR + " " + textStatus + " " + errorThrown)
                 }
             });
+        }
+
+        function displayErrorMessage(msg) {
+            var html = `<div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>` + msg + `</div>`
+            $('#loading').html(html);
+            $('#classesTbody').html("");
         }
 
         function getDate() {
@@ -119,10 +130,12 @@
 
         function makeTable(jsonData) {
             $('#loading').html("");
+            var rows = ""
             for (var i = 0; i < jsonData.length; i++) {
                 row = makeRow(jsonData[i]);
-                $('#classesTbody').append(row)
+                rows += row
             }
+            $('#classesTbody').html(rows)
         }
 
         function getProgressBarHtml() {
