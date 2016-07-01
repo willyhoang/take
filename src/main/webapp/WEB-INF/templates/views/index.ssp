@@ -152,7 +152,7 @@
             var row = "<tr>"
             row += "<td class=\"date hidden-xs\">" + rowData.date.month + "/" + rowData.date.day + "</td>"
             var startTime = formatTime(rowData.startTime.hour, rowData.startTime.minute)
-            row += "<td class=\"startTime\">" + dateToString(startTime) + "<span class=\"startTimeHidden\" style=\"display:none\">"+ dateToString(startTime, false) + "</span>" + "</td>"
+            row += "<td class=\"startTime\">" + dateToString(startTime) + "<span class=\"startTimeHidden\" style=\"display:none\">"+ startTime + "</span>" + "</td>"
             var endTime = formatTime(rowData.endTime.hour, rowData.endTime.minute)
             row += "<td class=\"endTime hidden-xs\">" + dateToString(endTime) + "</td>"
             row += "<td class=\"studio\">" + rowData.studio + "</td>"
@@ -172,8 +172,8 @@
             return d
         }
 
-        function dateToString(d, useHour12=true) {
-            return d.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit', hour12: useHour12});
+        function dateToString(d) {
+            return d.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
         }
 
 
