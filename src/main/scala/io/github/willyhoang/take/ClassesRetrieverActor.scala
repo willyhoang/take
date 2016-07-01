@@ -17,6 +17,7 @@ import scala.concurrent.duration._
 
 case class Process(date: String)
 case class ProcessMultiple()
+case class Reload()
 
 class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging {
   val cacheBackend = GuavaCache
@@ -70,6 +71,12 @@ class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging 
     case Process(date) => sender ? getCachedClasses(date)
     case ProcessMultiple() => {
       sender ! warmCacheWithClasses()
+    }
+    case Reload() => {
+      val today = new LocalDate()
+      val todayString = today.toString("yyyy-MM-dd")
+      logger.info(s"Reloading today's classes in cache: ${todayString}")
+      sender ! getClasses(todayString)
     }
   }
 }

@@ -45,6 +45,12 @@ object PeridanceScraper extends LazyLogging {
     val month = parsedDate.getMonthOfYear
 
     val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
+    if (chromePath == null) {
+      val msg = "CHROME_WEBDRIVER_PATH env must be set."
+      logger.error(msg)
+      throw new IllegalArgumentException(msg)
+    }
+
     System.setProperty("webdriver.chrome.driver", chromePath)
 
     val options = new ChromeOptions();
@@ -52,6 +58,7 @@ object PeridanceScraper extends LazyLogging {
     chromeBinaryPath.foreach(options.setBinary(_))
 
     val driver = new ChromeDriver(options)
+    try {
     driver.get("http://www.peridance.com/openclasses.cfm")
 
     var dateSelector = driver.findElements(By.cssSelector(s"td[data-month='${month -1}']" +
@@ -70,7 +77,6 @@ object PeridanceScraper extends LazyLogging {
     }
 
     // find desired date and click on it
-    try {
       val desiredDate = dateSelector.asScala.filter(_.getText == day.toString)
       if (desiredDate.isEmpty) {
         throw new IllegalArgumentException(s"Cannot select the day provided: ${date}")

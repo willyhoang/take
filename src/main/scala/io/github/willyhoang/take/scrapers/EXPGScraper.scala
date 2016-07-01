@@ -1,5 +1,6 @@
 package io.github.willyhoang.take.scrapers
 
+import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.LocalDate
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
@@ -9,7 +10,7 @@ import org.openqa.selenium.{By, WebElement}
 
 import scala.collection.JavaConverters._
 
-object EXPGScraper {
+object EXPGScraper extends LazyLogging {
 
   def clearInput(element: WebElement): Unit = {
     val originalValue = element.getAttribute("value")
@@ -31,6 +32,12 @@ object EXPGScraper {
     val formattedDate = LocalDate.parse(date).toString("M/dd/yyyy")
 
     val chromePath = System.getenv("CHROME_WEBDRIVER_PATH")
+    if (chromePath == null) {
+    val msg = "CHROME_WEBDRIVER_PATH env must be set."
+      logger.error(msg)
+      throw new IllegalArgumentException(msg)
+    }
+
     System.setProperty("webdriver.chrome.driver", chromePath)
 
     val options = new ChromeOptions();
