@@ -58,12 +58,13 @@ class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging 
 
   def warmCacheWithClasses() = {
     val today = new LocalDate()
-    val dates : List[String] = List.range(0, 6).map(today.plusDays(_).toString("yyyy-MM-dd"))
+    val dates : List[String] = List.range(-1, 6).map(today.plusDays(_).toString("yyyy-MM-dd"))
     logger.info(s"Warming caches for dates: ${dates}")
 
     for (date <- dates) {
       getClasses(date)
     }
+    logger.info(s"Finished warming caches for dates: ${dates}")
   }
 
   def receive = {

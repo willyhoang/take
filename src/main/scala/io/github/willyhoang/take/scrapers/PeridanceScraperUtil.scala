@@ -9,9 +9,10 @@ object PeridanceScraperUtil extends LazyLogging {
 
   def getClasses(date: String): Future[Seq[NormalizedClass]] = {
     Future {
-      logger.info(s"Scraping classes for date: ${date}")
+      logger.info(s"Scraping Peridance classes for date: ${date}")
       val rawText = PeridanceScraper.scrape(date)
       val parsedClasses = rawText.flatMap(PeridanceParser.parse(date, _)).map(_.toNormalizedClass())
+      logger.info(s"Finished Peridance scraping classes for date: ${date}")
       parsedClasses
     }
   }
