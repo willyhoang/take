@@ -83,6 +83,7 @@ object PeridanceScraper extends LazyLogging {
       pageSource
     } finally {
       driver.close()
+      driver.quit()
     }
   }
 }

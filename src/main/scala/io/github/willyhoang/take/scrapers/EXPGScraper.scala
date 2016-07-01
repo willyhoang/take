@@ -38,24 +38,28 @@ object EXPGScraper {
     chromeBinaryPath.foreach(options.setBinary(_))
 
     val driver = new ChromeDriver(options)
-    driver.get("https://clients.mindbodyonline.com/classic/home?studioid=177785")
+    try {
+      driver.get("https://clients.mindbodyonline.com/classic/home?studioid=177785")
 
-    driver.switchTo().frame("mainFrame")
+      driver.switchTo().frame("mainFrame")
 
-    val classesLink = driver.findElement(By.id("tabA102"))
-    classesLink.click()
+      val classesLink = driver.findElement(By.id("tabA102"))
+      classesLink.click()
 
-    val dayToggle = driver.findElement(By.id("day-tog-c"))
-    dayToggle.click()
+      val dayToggle = driver.findElement(By.id("day-tog-c"))
+      dayToggle.click()
 
-    val dateInput = driver.findElement(By.id("txtDate"))
-    clearInput(dateInput)
+      val dateInput = driver.findElement(By.id("txtDate"))
+      clearInput(dateInput)
 
-    val textDateInput = driver.findElement(By.id("txtDate"))
-    textDateInput.sendKeys(formattedDate)
-    textDateInput.submit()
-    val pageSource = driver.getPageSource
-    driver.close()
-    pageSource
+      val textDateInput = driver.findElement(By.id("txtDate"))
+      textDateInput.sendKeys(formattedDate)
+      textDateInput.submit()
+      val pageSource = driver.getPageSource
+      pageSource
+    } finally {
+      driver.close()
+      driver.quit()
+    }
   }
 }
