@@ -20,7 +20,7 @@ case class ProcessMultiple()
 
 class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging {
   val cacheBackend = GuavaCache
-  val expirationTime = Some(Duration(3, HOURS))
+  val expirationTime = Some(Duration(1, DAYS))
   implicit val defaultTimeout = Timeout(1000 * 300)
 
   def getCachedClasses(date: String): Future[String] = {
@@ -64,7 +64,6 @@ class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging 
     for (date <- dates) {
       getClasses(date)
     }
-    logger.info(s"Finished warming caches for dates: ${dates}")
   }
 
   def receive = {
