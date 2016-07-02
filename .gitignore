@@ -67,3 +67,9 @@ jrebel.lic
 
 # paulp script
 /.lib/
+
+.dockercfg.json
+.dockerignore
+.elasticbeanstalk/
+Dockerrun.aws.json
+.gitignore
