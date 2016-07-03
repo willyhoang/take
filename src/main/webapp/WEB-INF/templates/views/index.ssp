@@ -19,8 +19,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
         <script src="js/dropdowns-enhancement.js"></script>
 
-<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
-<link rel="stylesheet" href="stylesheets/bootstrap-multiselect.css" type="text/css"/>
+        <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+        <link rel="stylesheet" href="stylesheets/bootstrap-multiselect.css" type="text/css"/>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <style>
@@ -109,6 +109,7 @@
         <script type="text/javascript">
 
         var classesList;
+        var stylesFilterMap = {};
         // On page start up, set progress bar
         $('#loading').html(getProgressBarHtml());
         function loadClasses(date) {
@@ -120,13 +121,14 @@
                 url: "/classes/" + date,
                 success: function(data){
                     makeTable(data);
-                    loadStylesFilter(data);
                     var options = {
                         valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
                     };
                     classesList = new List('classes', options);
-                    $("#example-getting-started").multiselect('selectAll', false);
-                    $("#example-getting-started").multiselect('updateButtonText');
+                    loadStylesFilter(data);
+                    var selectedValues = $('#example-getting-started option:selected').map(function () { return this.value;} ).toArray();
+                    filterStyles(selectedValues);
+                    <%--selectDefaultStyles();--%>
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     displayErrorMessage(jqXHR + " " + textStatus + " " + errorThrown)
@@ -168,14 +170,28 @@
 
 
         function filterStyles(enabledStyles) {
-            if (enabledStyles == null) {
-                enabledStyles = [];
+            if (enabledStyles == null || enabledStyles.length == 0) {
+                noFilter();
+            } else {
+                classesList.filter(function(item) {
+                    var unescapedStyle = htmlDecode(item.values().style)
+                    return enabledStyles.indexOf(unescapedStyle) != -1;
+                });
             }
-            classesList.filter(function(item) {
-                var unescapedStyle = htmlDecode(item.values().style)
-                return enabledStyles.indexOf(unescapedStyle) != -1;
-            });
         }
+
+        function noFilter() {
+            classesList.filter();
+        }
+
+        Object.size = function(obj) {
+            var size = 0, key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) size++;
+            }
+            return size;
+        };
+
 
         function getUniqueStyles(jsonClasses) {
             var styles = jsonClasses.map(function(x) { return x.style; })
@@ -186,6 +202,7 @@
         }
 
         function loadStylesFilter(jsonClasses) {
+            $("#example-getting-started").multiselect("destroy");
             var stylesNames = getUniqueStyles(jsonClasses)
             loadFilter("#example-getting-started", stylesNames);
 
@@ -193,23 +210,60 @@
                 includeSelectAllOption: true,
                 numberDisplayed: 0,
                 nonSelectedText: 'No Styles Selected',
+                allSelectedText: 'All Styles Selected',
 
                 onChange: function(option, checked, select) {
                     var selectedValues = $('#example-getting-started').val();
                     filterStyles(selectedValues);
+                    saveStylesState();
                 },
                 onSelectAll: function() {
                     var selectedValues = $('#example-getting-started').val();
                     filterStyles(selectedValues);
+                    saveStylesState();
                 },
                 onDeselectAll: function() {
                     filterStyles([]);
+                    var options = $('#example-getting-started option')
+                    for (var i = 0; i < options.length; i++) {
+                        var style = options[i].value;
+                        delete stylesFilterMap[style];
+                    }
+                    localStorage.setItem("selectedStyles", JSON.stringify(stylesFilterMap));
                 }
             });
-            console.log("Hello");
+        }
+
+        function saveStylesState() {
+            var options = $('#example-getting-started option')
+            for (var i = 0; i < options.length; i++) {
+                var style = options[i].value;
+                var selected = options[i].selected;
+                stylesFilterMap[style] = selected;
+            }
+            localStorage.setItem("selectedStyles", JSON.stringify(stylesFilterMap));
+        }
+
+        function loadStylesState() {
+            var saved = JSON.parse(localStorage.getItem("selectedStyles"));
+            return saved;
+        }
+
+        function loadDefaultStyles() {
+            savedStylesMap = loadStylesState();
+            if (savedStylesMap != null) {
+                // load saved styles
+                for (var style in savedStylesMap) {
+                    if (savedStylesMap.hasOwnProperty(style)) {
+                        stylesFilterMap[style] = savedStylesMap[style];
+                    }
+                }
+            }
         }
 
         function loadFilter(filterName, names) {
+            loadDefaultStyles();
+            $(filterName).html("");
             var itemsHtml = "";
             for (var i = 0; i < names.length; i++) {
                 var item = makeFilterItem(names[i]);
@@ -223,7 +277,11 @@
             var id = styleNoWhiteSpace;
             var name = styleNoWhiteSpace;
             var value = style;
-            var item = "<option value=\"" + value + "\">" + value + "</option>"
+            var selectedHtml = "";
+            if (stylesFilterMap[style]) {
+                selectedHtml = " selected";
+            }
+            var item = "<option value=\"" + value + "\"" + selectedHtml + ">" + value + "</option>"
             return item
         }
 
