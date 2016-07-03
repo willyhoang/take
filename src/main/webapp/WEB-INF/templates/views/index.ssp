@@ -7,6 +7,7 @@
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css">
+        <link rel="stylesheet" href="stylesheets/dropdowns-enhancement.css">
 
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -16,6 +17,10 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
+        <script src="js/dropdowns-enhancement.js"></script>
+
+<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="stylesheets/bootstrap-multiselect.css" type="text/css"/>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <style>
@@ -43,11 +48,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Classes</a>
+                <a class="navbar-brand" href="#">Take</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
 
                 <form class="navbar-form navbar-left" role="search">
 
@@ -60,6 +66,13 @@
 
                     <div class="form-group">
                         <input type="text" class="form-control search" placeholder="Search">
+                    </div>
+
+
+                    <div class="btn-group">
+
+                        <select id="example-getting-started" multiple="multiple">
+                        </select>
                     </div>
 
                 </form>
@@ -94,6 +107,8 @@
     </div>
         <script src="http://listjs.com/no-cdn/list.js"></script>
         <script type="text/javascript">
+
+        var classesList;
         // On page start up, set progress bar
         $('#loading').html(getProgressBarHtml());
         function loadClasses(date) {
@@ -104,11 +119,14 @@
                 dataType: "json",
                 url: "/classes/" + date,
                 success: function(data){
-                    makeTable(data)
+                    makeTable(data);
+                    loadStylesFilter(data);
                     var options = {
                         valueNames: [ 'date', 'startTime', 'startTimeHidden', 'endTime', 'studio', 'instructor', 'style', 'level' ]
                     };
-                    var classesList = new List('classes', options);
+                    classesList = new List('classes', options);
+                    $("#example-getting-started").multiselect('selectAll', false);
+                    $("#example-getting-started").multiselect('updateButtonText');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     displayErrorMessage(jqXHR + " " + textStatus + " " + errorThrown)
@@ -136,12 +154,77 @@
 
         function makeTable(jsonData) {
             $('#loading').html("");
-            var rows = ""
+            var rows = "";
             for (var i = 0; i < jsonData.length; i++) {
                 row = makeRow(jsonData[i]);
-                rows += row
+                rows += row;
             }
-            $('#classesTbody').html(rows)
+            $('#classesTbody').html(rows);
+        }
+
+        function htmlDecode(value) {
+            return $('<div/>').html(value).text();
+        }
+
+
+        function filterStyles(enabledStyles) {
+            if (enabledStyles == null) {
+                enabledStyles = [];
+            }
+            classesList.filter(function(item) {
+                var unescapedStyle = htmlDecode(item.values().style)
+                return enabledStyles.indexOf(unescapedStyle) != -1;
+            });
+        }
+
+        function getUniqueStyles(jsonClasses) {
+            var styles = jsonClasses.map(function(x) { return x.style; })
+            var uniqueStyles = styles.filter(
+                function(item, pos) { return styles.indexOf(item) == pos; })
+            var sortedStyles = uniqueStyles.sort();
+            return sortedStyles;
+        }
+
+        function loadStylesFilter(jsonClasses) {
+            var stylesNames = getUniqueStyles(jsonClasses)
+            loadFilter("#example-getting-started", stylesNames);
+
+            $('#example-getting-started').multiselect({
+                includeSelectAllOption: true,
+                numberDisplayed: 0,
+                nonSelectedText: 'No Styles Selected',
+
+                onChange: function(option, checked, select) {
+                    var selectedValues = $('#example-getting-started').val();
+                    filterStyles(selectedValues);
+                },
+                onSelectAll: function() {
+                    var selectedValues = $('#example-getting-started').val();
+                    filterStyles(selectedValues);
+                },
+                onDeselectAll: function() {
+                    filterStyles([]);
+                }
+            });
+            console.log("Hello");
+        }
+
+        function loadFilter(filterName, names) {
+            var itemsHtml = "";
+            for (var i = 0; i < names.length; i++) {
+                var item = makeFilterItem(names[i]);
+                itemsHtml += item;
+            }
+            $(filterName).html(itemsHtml);
+        }
+
+        function makeFilterItem(style) {
+            var styleNoWhiteSpace = style.replace(/\s+/g, '');
+            var id = styleNoWhiteSpace;
+            var name = styleNoWhiteSpace;
+            var value = style;
+            var item = "<option value=\"" + value + "\">" + value + "</option>"
+            return item
         }
 
         function getProgressBarHtml() {

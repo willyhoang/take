@@ -4,7 +4,7 @@ import _root_.akka.pattern.ask
 import akka.actor.{Actor, ActorSystem}
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
-import io.github.willyhoang.take.scrapers.{BDCScraperUtil, EXPGScraperUtil, PeridanceScraperUtil}
+import io.github.willyhoang.take.scrapers.{NormalizedClass, BDCScraperUtil}
 import net.liftweb.json.Serialization.write
 import net.liftweb.json.ext.JodaTimeSerializers
 import net.liftweb.json.{NoTypeHints, Serialization}
@@ -40,9 +40,11 @@ class ClassesRetrieverActor(system: ActorSystem) extends Actor with LazyLogging 
   def getClasses(date: String): Future[String] = {
     LocalDate.parse(date)
     val bdcClasses = BDCScraperUtil.getClasses(date)
-    val expgClasses = EXPGScraperUtil.getClasses(date)
-    val peridanceClasses = PeridanceScraperUtil.getClasses(date)
+//    val expgClasses = EXPGScraperUtil.getClasses(date)
+//    val peridanceClasses = PeridanceScraperUtil.getClasses(date)
 
+    val expgClasses = Future.successful(List[NormalizedClass]())
+    val peridanceClasses = Future.successful(List[NormalizedClass]())
     for {
       bdc <- bdcClasses
       expg <- expgClasses
