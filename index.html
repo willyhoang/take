@@ -102,7 +102,7 @@
 
 
 </div>
-<script src="http://listjs.com/no-cdn/list.js"></script>
+<script src="js/list.js"></script>
 <script type="text/javascript">
 
         var classesList;
@@ -115,7 +115,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: "http://take-prod.us-east-1.elasticbeanstalk.com/classes/" + date,
+                url: "https://take-prod.us-east-1.elasticbeanstalk.com/classes/" + date,
                 success: function(data){
                     makeTable(data);
                     var options = {
