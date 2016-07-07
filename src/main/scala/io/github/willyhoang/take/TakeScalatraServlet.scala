@@ -6,15 +6,16 @@ import org.scalatra.guavaCache.GuavaCache
 import org.scalatra.{AsyncResult, FutureSupport}
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
 
 class TakeScalatraServlet(system: ActorSystem, classesRetrieverActor: ActorRef)
   extends TakeStack with FutureSupport {
 
   implicit val cacheBackend = GuavaCache
   implicit def executor: ExecutionContext = system.dispatcher
+  implicit val defaultTimeout: Timeout = Timeout(60 seconds)
 
   import _root_.akka.pattern.ask
-  implicit val defaultTimeout = Timeout(1000 * 60)
 
   get("/") {
     contentType = "text/html"
@@ -22,8 +23,9 @@ class TakeScalatraServlet(system: ActorSystem, classesRetrieverActor: ActorRef)
   }
 
   get("/classes/:date") {
-    new AsyncResult { val is =
-      classesRetrieverActor ? Process(params("date"))
+    new AsyncResult {
+      override implicit def timeout: Duration = 60 seconds
+      val is = classesRetrieverActor ? Process(params("date"))
     }
   }
 }
