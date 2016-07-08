@@ -1,0 +1,27 @@
+{
+  "name": "take",
+  "version": "0.1.7",
+  "description": "Easily find dance classes in NYC.",
+  "main": "main.js",
+  "dependencies": {
+    "babel-preset-react": "^6.11.1",
+    "babelify": "^7.3.0",
+    "react": "^15.2.0",
+    "react-bootstrap": "^0.29.5",
+    "react-dom": "^15.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willyhoang/take.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/willyhoang/take/issues"
+  },
+  "homepage": "https://github.com/willyhoang/take#readme"
+}
