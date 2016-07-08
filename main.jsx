@@ -1,4 +1,5 @@
 // main.js
+var $ = require('jquery');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Navbar = require('react-bootstrap').Navbar;
@@ -89,8 +90,24 @@ var DanceClass = React.createClass({
 
 
 var DanceClassesTable = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
-    var danceClasses = this.props.data.map(function(rowJson) {
+    var danceClasses = this.state.data.map(function(rowJson) {
       return (
         <DanceClass date={rowJson.date} startTime={rowJson.startTime} endTime={rowJson.endTime} studio={rowJson.studio} instructor={rowJson.instructor} style={rowJson.style}/>
       );
@@ -170,7 +187,7 @@ const shebang = (
     <p className="lead">Easily look through classes from various dance studios in NYC.</p>
     {navBarInstance}
     <Panel>
-      <DanceClassesTable data={data} fill/>
+      <DanceClassesTable url="http://take-prod.us-east-1.elasticbeanstalk.com/classes/2016-07-08" fill/>
     </Panel>
   </Container>
 );
