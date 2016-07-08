@@ -73,3 +73,5 @@ jrebel.lic
 .elasticbeanstalk/
 Dockerrun.aws.json
 .gitignore
+bundle.js
+node_modules/
