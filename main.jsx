@@ -15,6 +15,7 @@ var FormControl = require('react-bootstrap').FormControl;
 var Table = require('reactable').Table;
 var Tr = require('reactable').Tr;
 var Td = require('reactable').Td;
+var Multiselect = require('react-bootstrap-multiselect');
 
 var Container = React.createClass({
   render: function() {
@@ -46,6 +47,16 @@ var ClassesDatePicker = React.createClass({
   }
 });
 
+function getUniqueStyles(classes) {
+    var styles = classes.map(function(danceClass) {
+      return danceClass.style.toLowerCase();
+    });
+    var uniqueStyles = styles.filter(
+      function(item, pos) { return styles.indexOf(item) == pos; })
+    var sortedStyles = uniqueStyles.sort();
+    return sortedStyles;
+}
+
 var ClassesNavBar = React.createClass({
   getInitialState: function(){
     return {
@@ -59,6 +70,12 @@ var ClassesNavBar = React.createClass({
     this.props.callbackParent(updatedDate);
   },
   render: function() {
+    var styles = getUniqueStyles(this.props.classes);
+    var stylesData = styles.map(function (style) {
+      return { "value": style };
+    });
+    console.log(stylesData);
+
     return (
       <Navbar fluid={true} bsStyle="inverse">
         <Navbar.Header>
@@ -74,8 +91,9 @@ var ClassesNavBar = React.createClass({
             </Navbar.Form>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Link Right</NavItem>
-            <NavItem eventKey={2} href="#">Link Right</NavItem>
+            <Navbar.Form>
+              <Multiselect data={stylesData} multiple includeSelectAllOption={true}/>
+            </Navbar.Form>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -194,7 +212,7 @@ var DanceClassesBody = React.createClass({
   render: function() {
     return (
       <div>
-        <ClassesNavBar initialDate={this.state.date} callbackParent={this.onChildChanged}/>
+        <ClassesNavBar initialDate={this.state.date} callbackParent={this.onChildChanged} classes={this.state.data}/>
         <Panel>
           <DanceClassesTable initialDate={this.state.date} data={this.state.data} fill/>
         </Panel>
