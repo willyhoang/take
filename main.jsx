@@ -12,6 +12,9 @@ var Panel = require('react-bootstrap').Panel;
 var DatePicker = require("react-bootstrap-date-picker");
 var FormGroup = require('react-bootstrap').FormGroup;
 var FormControl = require('react-bootstrap').FormControl;
+var Table = require('reactable').Table;
+var Tr = require('reactable').Tr;
+var Td = require('reactable').Td;
 
 var Container = React.createClass({
   render: function() {
@@ -104,21 +107,6 @@ function formatDate(jsonDate) {
   return jsonDate.month + "/" +  jsonDate.day;
 }
 
-var DanceClass = React.createClass({
-  render: function() {
-    return (
-      <tr>
-        <td>{formatDate(this.props.date)}</td>
-        <td>{formatTime(this.props.startTime)}</td>
-        <td>{formatTime(this.props.endTime)}</td>
-        <td>{this.props.studio}</td>
-        <td>{this.props.instructor}</td>
-        <td>{this.props.style}</td>
-      </tr>
-    );
-  }
-});
-
 function formatDateForUrl(isoDate) {
   return isoDate.substring(0, 10);
 }
@@ -127,24 +115,20 @@ var DanceClassesTable = React.createClass({
   render: function() {
     var danceClasses = this.props.data.map(function(rowJson) {
       return (
-        <DanceClass date={rowJson.date} startTime={rowJson.startTime} endTime={rowJson.endTime} studio={rowJson.studio} instructor={rowJson.instructor} style={rowJson.style}/>
+        <Tr>
+          <Td column="Date">{formatDate(rowJson.date)}</Td>
+          <Td column="Start Time">{formatTime(rowJson.startTime)}</Td>
+          <Td column="End Time">{formatTime(rowJson.endTime)}</Td>
+          <Td column="Studio">{rowJson.studio}</Td>
+          <Td column="Instructor">{rowJson.instructor}</Td>
+          <Td column="Style">{rowJson.style}</Td>
+          <Td column="Level">{rowJson.level}</Td>
+        </Tr>
       );
     });
     return (
-      <Table responsive striped fill>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Studio</th>
-            <th>Instructor</th>
-            <th>Style</th>
-          </tr>
-        </thead>
-        <tbody>
-          {danceClasses}
-        </tbody>
+      <Table className="table table-striped">
+        {danceClasses}
       </Table>
     );
   }

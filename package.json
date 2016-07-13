@@ -10,7 +10,8 @@
     "react": "^15.2.0",
     "react-bootstrap": "^0.29.5",
     "react-bootstrap-date-picker": "^3.1.0",
-    "react-dom": "^15.2.0"
+    "react-dom": "^15.2.0",
+    "reactable": "^0.13.2"
   },
   "devDependencies": {},
   "scripts": {
