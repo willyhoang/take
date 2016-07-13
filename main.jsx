@@ -100,6 +100,17 @@ function formatTime(jsonTime) {
 }
 
 /**
+ * Convert a JSON time into a 24 hour format string.
+ */
+function sortableTime(jsonTime) {
+  var d = new Date();
+  d.setHours(jsonTime.hour);
+  d.setMinutes(jsonTime.minute);
+  d.setSeconds(0);
+  return d
+}
+
+/**
  * Converts a JSON date into a human readable string.
  * @param {object} date represented as JSON
  */
@@ -117,71 +128,27 @@ var DanceClassesTable = React.createClass({
       return (
         <Tr>
           <Td column="Date">{formatDate(rowJson.date)}</Td>
-          <Td column="Start Time">{formatTime(rowJson.startTime)}</Td>
+          <Td column="Start Time" value={sortableTime(rowJson.startTime)}>
+            {formatTime(rowJson.startTime)}
+          </Td>
           <Td column="End Time">{formatTime(rowJson.endTime)}</Td>
-          <Td column="Studio">{rowJson.studio}</Td>
-          <Td column="Instructor">{rowJson.instructor}</Td>
-          <Td column="Style">{rowJson.style}</Td>
-          <Td column="Level">{rowJson.level}</Td>
+          <Td column="Studio" value={rowJson.studio}>{rowJson.studio}</Td>
+          <Td column="Instructor" value={rowJson.instructor}>
+            {rowJson.instructor}
+          </Td>
+          <Td column="Style" value={rowJson.style}>{rowJson.style}</Td>
+          <Td column="Level" value={rowJson.level}>{rowJson.level}</Td>
         </Tr>
       );
     });
     return (
-      <Table className="table table-striped">
+      <Table className="table table-striped"
+        sortable={['Start Time', 'Studio', 'Instructor', 'Style', 'Level']}>
         {danceClasses}
       </Table>
     );
   }
 });
-
-var data = [
-  {
-date: {
-year: 2016,
-month: 7,
-day: 8
-},
-startTime: {
-hour: 9,
-minute: 0,
-second: 0,
-millis: 0
-},
-endTime: {
-hour: 10,
-minute: 30,
-second: 0,
-millis: 0
-},
-studio: "BDC",
-instructor: "Greg Zane",
-style: "BALLET",
-level: "Adv Beg"
-},
-{
-date: {
-year: 2016,
-month: 7,
-day: 8
-},
-startTime: {
-hour: 9,
-minute: 0,
-second: 0,
-millis: 0
-},
-endTime: {
-hour: 10,
-minute: 30,
-second: 0,
-millis: 0
-},
-studio: "BDC",
-instructor: "Eric Campros^ -Canceled",
-style: "CONTEMPORARY JAZZ",
-level: "Bas"
-},
-];
 
 var DanceClassesBody = React.createClass({
   getInitialState: function() {
