@@ -143,7 +143,17 @@ var DanceClassesTable = React.createClass({
     });
     return (
       <Table className="table table-striped"
-        sortable={['Start Time', 'Studio', 'Instructor', 'Style', 'Level']}>
+        sortable={["Start Time", "Studio", "Instructor", "Style", "Level"]}
+        filterable={[
+            {
+                column: 'Style',
+                filterFunction: function(contents, filter) {
+                    var filters = filter.split(",")
+                    return filters.indexOf(contents.toLowerCase()) > -1;
+                }
+            },
+        ]}
+        hideFilterInput>
         {danceClasses}
       </Table>
     );
