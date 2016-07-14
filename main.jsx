@@ -52,15 +52,21 @@ function getUniqueStyles(classes) {
       return danceClass.style.toLowerCase();
     });
     var uniqueStyles = styles.filter(
-      function(item, pos) { return styles.indexOf(item) == pos; })
+      function(item, pos) { return styles.indexOf(item) == pos; }
+    )
     var sortedStyles = uniqueStyles.sort();
-    return sortedStyles;
+    var stylesData = {};
+    sortedStyles.forEach(function(val) {
+      stylesData[val] = true;
+    });
+    return stylesData;
 }
 
 var ClassesNavBar = React.createClass({
+
   getInitialState: function(){
     return {
-      date: this.props.initialDate
+      date: this.props.initialDate,
     };
   },
   onChildChange: function(updatedDate) {
@@ -69,13 +75,15 @@ var ClassesNavBar = React.createClass({
     console.log("calling parent (danceclassesbody) on child changed method")
     this.props.callbackParent(updatedDate);
   },
-  render: function() {
-    var styles = getUniqueStyles(this.props.classes);
-    var stylesData = styles.map(function (style) {
-      return { "value": style };
+  createValueToSelectedMapList: function(stylesEnabledMap) {
+    var stylesToSelectedList = Object.keys(stylesEnabledMap).map(function (style) {
+      return {value: style, selected: stylesEnabledMap[style]}
     });
-    console.log(stylesData);
-
+    return stylesToSelectedList;
+  },
+  render: function() {
+    console.log("state stylesEnabledMap")
+    console.log(this.state.stylesEnabledMap)
     return (
       <Navbar fluid={true} bsStyle="inverse">
         <Navbar.Header>
@@ -92,7 +100,7 @@ var ClassesNavBar = React.createClass({
           </Nav>
           <Nav pullRight>
             <Navbar.Form>
-              <Multiselect data={stylesData} multiple includeSelectAllOption={true}/>
+              <Multiselect data={this.createValueToSelectedMapList(this.props.stylesEnabledMap)} multiple includeSelectAllOption={true} onChange={this.props.multiselectParentCallback}/>
             </Navbar.Form>
           </Nav>
         </Navbar.Collapse>
@@ -183,12 +191,18 @@ var DanceClassesBody = React.createClass({
     var initialDate = new Date().toISOString();
     return {
       date: initialDate,
-      data: []
+      classes: [],
+      stylesEnabledMap: {}
     };
   },
   onChildChanged: function(updatedDate) {
     console.log("calling dance classes body on child changed...")
     this.setState({ date: updatedDate }, this.loadClassesForDate);
+  },
+  onMultiselectChange: function(option, checked, select) {
+    var updatedMap = this.state.stylesEnabledMap;
+    updatedMap[option.val()] = checked;
+    this.setState({ stylesEnabledMap: updatedMap });
   },
   loadClassesForDate: function() {
     console.log("loading classes for date: " + this.state.date)
@@ -199,7 +213,10 @@ var DanceClassesBody = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        this.setState({
+          classes: data,
+          stylesEnabledMap: getUniqueStyles(data)
+        });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -212,9 +229,9 @@ var DanceClassesBody = React.createClass({
   render: function() {
     return (
       <div>
-        <ClassesNavBar initialDate={this.state.date} callbackParent={this.onChildChanged} classes={this.state.data}/>
+        <ClassesNavBar initialDate={this.state.date} callbackParent={this.onChildChanged} stylesEnabledMap={this.state.stylesEnabledMap} multiselectParentCallback={this.onMultiselectChange}/>
         <Panel>
-          <DanceClassesTable initialDate={this.state.date} data={this.state.data} fill/>
+          <DanceClassesTable initialDate={this.state.date} data={this.state.classes} fill/>
         </Panel>
       </div>
     );
